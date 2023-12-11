@@ -1,0 +1,199 @@
+openapi: 3.0.0
+info:
+  title: Аренда ресурсов в облачном сервисе
+  description: |-
+    Это пример API для хранения заказов бронирования столиков в ресторане.
+  termsOfService: https://gb.ru/
+  contact:
+    email: lidagb@mail.r
+  license:
+    name: GBArcitecture HW9
+    url: https://gb.ru/
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1/
+tags:
+  - name: Заказы
+    description: Информация о хранении заказов
+    externalDocs:
+      description: Посмотреть больше
+      url: https://gb.ru/
+paths:
+  /Сlouds:
+    get:
+      summary: Метод получения списка ресурсов на облако
+      tags:
+        - Clouds
+      operationId: getAllClouds
+      responses: 
+        "200":
+          description: Успешный ответ на запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Clouds"
+        "404":
+          description: Ресурс не найден
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное,например, некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Clouds
+      summary: Создание заказа на облако
+      operationId: createCloud
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Clouds"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Clouds"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Clouds"
+        required: true
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clouds'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Clouds'
+        "405":
+          description: Неверный ввод
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное,например, некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+    
+  /Cloud/{cloudId}:
+    delete:
+      summary: Отмена заказа по ID
+      tags:
+        - Clouds
+      operationId: canselCloudByID
+      parameters:
+        - name: cloudId
+          in: path
+          required: true
+          description: Id заказа на облако
+          schema:
+            type: integer
+          example: 123123
+      responses:
+        "200":
+          description: Отмена прошла успешно
+          content:
+            aplication/json: {}
+        "default":
+          description: Всё остальное
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - UpdateClouds
+      summary: Обновить информацию о заказах
+      operationId: updateClouds
+      parameters:
+        - name: cloudId
+          in: path
+          description: Id заказа на облако
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Обновить существующий заказ
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cloud'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Cloud'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cloud'
+      responses:
+        default:
+          description: successful operation
+
+components:
+  schemas:
+    Cloud:
+      type: object
+      required:
+        - id_client
+        - OS
+        - RAM
+        - CPU
+        - SSD
+      properties:
+        cloud_id:
+          type: integer
+          format: int64
+          example: 101023
+        client_id:
+          type: integer
+          format: int64
+          example: 678678
+        OS:
+          type: string
+          enum:
+            - Linux
+            - Windows
+            - MacOC
+          example: 7
+          description: Операционная система облачного сервиса
+        PAM:
+          type: integer
+          format: int64
+          example: 256
+        CPU:
+          type: integer
+          format: int32
+          example: 4
+        SSD:
+          type: integer
+          format: int64
+          example: 1024
+      xml:
+        name: order
+    Clouds:
+      type: array
+      items:
+        $ref: "#/components/schemas/Cloud"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      example: 
+        code: 200
+        message: "успешно"
+    

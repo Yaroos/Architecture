@@ -1,0 +1,474 @@
+openapi: 3.0.0
+info:
+  title: Робот-пылесос
+  description: |-
+    API для подключения к роботу пылесосу.
+  termsOfService: https://gb.ru/
+  contact:
+    email: lidagb@mail.r
+  license:
+    name: GBArcitecture HW10
+    url: https://gb.ru/
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1/
+tags:
+  - name: Robots
+    description: Информация о роботах-пылесосах
+    externalDocs:
+      description: Посмотреть больше
+      url: https://gb.ru/
+  - name: Users
+    description: Информация о пользователях
+    externalDocs:
+      description: Посмотреть больше
+      url: https://gb.ru/
+  - name: Groups
+    description: Информация о групах
+    externalDocs:
+      description: Посмотреть больше
+      url: https://gb.ru/
+      
+paths:
+  /Robots:
+    get:
+      summary: Получаем всех роботов
+      tags:
+        - Robots
+      operationId: getAllRobots
+      responses: 
+        "200":
+          description: Успешно нашли роботов
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Robots"
+        "404":
+          description: Робот не найден
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Robots
+      summary: Добавить робота
+      operationId: createRobot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Robot"
+        required: true
+      responses:
+        "200":
+          description: Робот успешно добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Robot'  
+        "405":
+          description: Неверно введен IP-адрес
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /Robots/{robotId}:
+    delete:
+      summary: Удалить робота
+      tags:
+        - Robots
+      operationId: deleteRobotByID
+      parameters:
+        - name: robotId
+          in: path
+          required: true
+          description: Id заказа на облако
+          schema:
+            type: integer
+          example: 123123
+      responses:
+        "200":
+          description: Робот удален
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Robots
+      summary: Обновить информацию о роботах
+      operationId: updateRobots
+      parameters:
+        - name: robotId
+          in: path
+          description: Ip-адрес робота
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Обновить информацию о роботах
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Robots'
+      responses:
+        "200":
+          description: Список роботов обновлен
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        
+  /Users:
+    get:
+      summary: Получаем всех пользователей
+      tags:
+        - Users
+      operationId: getAllUsers
+      responses: 
+        "200":
+          description: Успешно нашли пользователей
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        "404":
+          description: Пользователь не найден
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Users
+      summary: Добавить пользователя
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: Пользователь успешно добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'  
+        "405":
+          description: Неверно введен Id-пользователя
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /Users/{userId}:
+    delete:
+      summary: Удалить пользователя
+      tags:
+        - Users
+      operationId: deleteUserByID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Id пользователя
+          schema:
+            type: integer
+          example: 123123
+      responses:
+        "200":
+          description: Пользователь удален
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Users
+      summary: Обновить информацию о пользователях
+      operationId: updateUsers
+      parameters:
+        - name: userId
+          in: path
+          description: Id-пользователя
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Обновить информацию о пользователях
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users'
+      responses:
+        "200":
+          description: Список пользователей обновлен
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          
+  /Groups:
+    get:
+      summary: Получить группы
+      tags:
+        - Groups
+      operationId: getAllGroups
+      responses: 
+        "200":
+          description: Успешно нашли группы
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Groups"
+        "404":
+          description: Групп не существует
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Groups
+      summary: Добавить группу
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsersGroup"
+        required: true
+      responses:
+        "200":
+          description: Пользователь успешно добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'  
+        "405":
+          description: Неверно введен Id-пользователя
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Некорректный запрос
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /Groups/{groupId}:
+    delete:
+      summary: Удалить группу
+      tags:
+        - Groups
+      operationId: deleteGroupByID
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Id группы
+          schema:
+            type: integer
+          example: 123123
+      responses:
+        "200":
+          description: Пользователь удален
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Groups
+      summary: Обновить информацию о группах
+      operationId: updateGroups
+      parameters:
+        - name: groupId
+          in: path
+          description: Id-группы
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Обновить информацию о пользователях
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Groups'
+      responses:
+        "200":
+          description: Список групп обновлен
+          content:
+            aplication/json: {}
+        "default":
+          description: Произошла ошибка
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Robot:
+      type: object
+      required:
+        - id
+        - model
+        - versionPO
+        - idStatus
+        - resource
+        - manufactureNumber
+        - IPadress
+        - idHistory
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 101023
+        model:
+          type: string
+          example: "RT67-V8"
+        versionPO:
+          type: integer
+          format: int64
+          example: 3
+        idStatus:
+          type: integer
+          format: int64
+          example: 2
+        resource:
+          type: integer
+          format: int64
+          example: 64
+        manufactureNumber:
+          type: string
+          example: "N-1024"
+        IPadress:
+          type: integer
+          format: int64
+          example: 1024
+        idHistory:
+          type: integer
+          format: int64
+          example: 14
+    Robots:
+      type: array
+      items: 
+          $ref: "#/components/schemas/Robot"
+    User:
+      type: object
+      required:
+        - id
+        - login
+        - hash
+        - tel
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 101023
+        login:
+          type: string
+          example: "Alla"
+        hash:
+          type: integer
+          format: int64
+          example: 337932569
+        tel:
+          type: integer
+          format: int64
+          example: 2
+    Users:
+          type: array
+          items: 
+            $ref: "#/components/schemas/User"
+    UsersGroup:
+      type: object
+      required:
+        - id_group
+        - idRobot
+        - users
+      properties:
+        id_group:
+          type: integer
+          format: int64
+          example: 101023
+        idRobot:
+          type: integer
+          format: int64
+          example: 101023
+        users:
+          type: array
+          items: 
+            $ref: "#/components/schemas/User"
+    Groups:
+          type: array
+          items: 
+            $ref: "#/components/schemas/UsersGroup"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      example: 
+        code: 200
+        message: "успешно"
+    
